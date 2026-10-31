@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f7f3">
+  <meta name="description" content="What does 100,000 people actually look like? Turn any whole number into an exact, explorable crowd. Every figure is one person.">
+  <title>People into perspective — See the people behind the number</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-fit" viewBox="0 0 24 24"><path d="M9 4H4v5m11-5h5v5M4 15v5h5m11-5v5h-5"/></symbol>
+    <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="4" r="2.5" fill="currentColor" stroke="none"/><path d="M8 13v-3a4 4 0 0 1 8 0v3M10 10v11m4-11v11"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="m10 14 4-4m-5 6-1 1a4 4 0 0 1-6-6l4-4a4 4 0 0 1 6 0m0 10a4 4 0 0 0 6 0l4-4a4 4 0 0 0-6-6l-1 1" transform="translate(1 0) scale(.9)"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></symbol>
+  </defs></svg>
+
+  <header class="site-header page-width">
+    <a class="brand" href="./" aria-label="People into perspective, home">
+      <img src="./favicon.svg" width="35" height="35" alt="">
+      <span>people into<br>perspective<span class="brand-period">.</span></span>
+    </a>
+    <div class="header-right"><span class="header-note"><span class="status-dot"></span>A little more human.</span><button class="text-button" id="about-button">The idea <span aria-hidden="true">↗</span></button></div>
+  </header>
+
+  <main class="page-width">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="intro-copy">
+        <div class="eyebrow"><span class="tiny-line"></span> A SMALL EXPERIMENT IN SCALE</div>
+        <h1 id="page-title">Numbers are abstract.<br><span>People aren’t.</span></h1>
+        <p>Ten people, a thousand, a million.<br class="mobile-break"> See what a number really looks like.</p>
+      </div>
+      <div class="number-control">
+        <form id="number-form" novalidate>
+          <label for="people-input">How many people are you thinking?</label>
+          <div class="input-box">
+            <input id="people-input" type="text" inputmode="numeric" value="1,000" autocomplete="off" spellcheck="false" aria-describedby="input-error" maxlength="80">
+            <span class="input-unit">people</span>
+            <button type="submit" class="visualize-button" aria-label="Visualize this number"><svg class="icon"><use href="#i-arrow"/></svg></button>
+          </div>
+          <p class="input-error" id="input-error" role="alert"></p>
+        </form>
+        <div class="presets" aria-label="Try a crowd size"><span>Try</span><button data-count="10">10</button><button data-count="100">100</button><button data-count="1000" aria-pressed="true">1,000</button><button data-count="100000">100k</button><button data-count="1000000">1 million</button><button data-count="8000000000">8 billion</button></div>
+      </div>
+    </section>
+
+    <section class="crowd-panel" aria-label="Interactive crowd visualization">
+      <div class="visually-hidden" id="result-status" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div class="panel-header">
+        <div class="crowd-heading"><span class="count-heading" id="count-heading">1,000</span><span class="people-label" id="people-label">people</span><span class="exact-badge"><span class="status-dot"></span>EXACT COUNT</span></div>
+        <button id="share-button" class="share-button" aria-label="Copy a link to this crowd"><svg class="icon"><use href="#i-link"/></svg><span>Share this view</span></button>
+      </div>
+      <div class="canvas-wrap" id="canvas-wrap">
+        <canvas id="crowd" tabindex="0" role="img" aria-label="An exact grid of 1,000 people. Use plus and minus to zoom, zero to fit, or drag to explore."></canvas>
+        <div class="empty-state" id="empty-state" hidden><span class="empty-circle"></span><strong>A little breathing room.</strong><span>No people here. Try adding a few.</span></div>
+        <div class="person-tooltip" id="person-tooltip" hidden></div>
+        <div class="density-note" id="density-note" hidden><span>That’s a lot of people. Zoom in to see individual figures.</span><button id="see-person">Find a person <svg class="icon"><use href="#i-arrow"/></svg></button></div>
+        <div class="canvas-corner canvas-corner-tl"></div><div class="canvas-corner canvas-corner-tr"></div><div class="canvas-corner canvas-corner-bl"></div><div class="canvas-corner canvas-corner-br"></div>
+      </div>
+      <div class="panel-footer">
+        <div class="figure-legend"><svg class="icon person-legend"><use href="#i-person"/></svg><span>1 figure <span class="legend-equals">=</span> 1 person</span></div>
+        <span class="explore-hint" id="explore-hint">Scroll to zoom. Drag to explore.</span>
+        <div class="view-controls" aria-label="Crowd zoom controls"><button id="zoom-out" aria-label="Zoom out" title="Zoom out (−)"><svg class="icon"><use href="#i-minus"/></svg></button><output id="zoom-label" aria-label="Zoom relative to fitted view">100%</output><button id="zoom-in" aria-label="Zoom in" title="Zoom in (+)"><svg class="icon"><use href="#i-plus"/></svg></button><span class="control-divider"></span><button id="fit-button" aria-label="Fit all people in view" title="Fit everyone (0)"><svg class="icon"><use href="#i-fit"/></svg><span>Fit all</span></button></div>
+      </div>
+    </section>
+
+    <section class="perspective-strip" aria-label="A little perspective">
+      <div class="perspective-label"><span class="sun-mark" aria-hidden="true">✳</span><span>A LITTLE<br>PERSPECTIVE</span></div>
+      <p id="perspective-text">If you met one person every second, meeting this crowd would take <strong>16 minutes, 40 seconds.</strong></p>
+      <span class="perspective-aside">Every one has a story.</span>
+    </section>
+    <footer class="site-footer"><span>Behind every number, there’s someone.</span><button id="how-button">How it works <span aria-hidden="true">↗</span></button></footer>
+  </main>
+
+  <dialog id="about-dialog" aria-labelledby="dialog-title">
+    <button class="dialog-close" id="close-dialog" aria-label="Close explanation"><svg class="icon"><use href="#i-close"/></svg></button>
+    <img src="./favicon.svg" width="48" height="48" alt="">
+    <div class="eyebrow">A SMALL EXPERIMENT IN SCALE</div>
+    <h2 id="dialog-title">A number is easier to feel<br>when it has a face.</h2>
+    <p>We hear big numbers every day. They’re harder to imagine. This is a small space to slow down and see the people behind them.</p>
+    <p>Every figure has its own place in an exact grid. Enter a whole number, scroll or pinch to zoom, and drag to explore. Hover over a figure to see its number.</p>
+    <div class="dialog-detail"><strong>Big crowds, honestly.</strong><p>A screen has a limited number of pixels. When people become smaller than a pixel, you’ll see the crowd’s density. Zoom in to resolve individual figures again. No people are dropped or sampled.</p><p>Counts from 0 to 9,007,199,254,740,991 are supported. You can also type shortcuts like 100k, 1.5 million, or 8 billion.</p></div>
+    <button class="dialog-done" id="dialog-done">Back to the people <svg class="icon"><use href="#i-arrow"/></svg></button>
+  </dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <noscript><p class="noscript">Please enable JavaScript to explore the crowd.</p></noscript>
+</body>
+</html>

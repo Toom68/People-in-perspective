@@ -1,0 +1,11 @@
+{
+  "name": "people-into-perspective",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node site/scripts/dev.mjs",
+    "dev": "node site/scripts/dev.mjs",
+    "test": "node --test site/tests/*.test.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
